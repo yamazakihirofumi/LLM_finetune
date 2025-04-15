@@ -12,7 +12,6 @@ Qwen*/
 # Specific directories
 pre_process/*.jsonl
 pre_process/*.csv
-pre_process/datas/*.jsonl
-pre_process/datas/*.csv
+pre_process/datas/*/
 pre_process/evaluation/*.csv
 qlora_checkpoints/
