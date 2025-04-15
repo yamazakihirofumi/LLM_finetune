@@ -1,0 +1,18 @@
+# Specific files
+api.txt
+prompt.txt
+
+# Qwen model directories - use wildcard properly
+Qwen*/
+
+# CSV and JSONL files (globally)
+*.csv
+*.jsonl
+
+# Specific directories
+pre_process/*.jsonl
+pre_process/*.csv
+pre_process/datas/*.jsonl
+pre_process/datas/*.csv
+pre_process/evaluation/*.csv
+qlora_checkpoints/

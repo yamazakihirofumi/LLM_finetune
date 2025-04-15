@@ -1,0 +1,23 @@
+Model: ./Qwen2.5-0.5B
+Test set: ./pre_process/evaluation/test.csv
+Total samples: 14849
+Valid predictions: 12234 (82.39%)
+Accuracy: 0.1578
+
+Classification Report:
+              precision    recall  f1-score   support
+
+    Positive       0.17      0.82      0.28      1634
+        Mild       0.51      0.02      0.04      5263
+    Negative       0.09      0.32      0.14      1063
+  Irrelevant       0.39      0.04      0.06      4274
+
+    accuracy                           0.16     12234
+   macro avg       0.29      0.30      0.13     12234
+weighted avg       0.39      0.16      0.09     12234
+
+Confusion Matrix:
+[[1334   20  259   21]
+ [3057  112 1931  163]
+ [ 647   29  335   52]
+ [2736   57 1331  150]]
