@@ -12,7 +12,7 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 base_model_path = "./Qwen2.5-3B"
 adapter_path = "./qlora_checkpoints/final_model"  # Path to your fine-tuned LoRA adapter
 test_data_path = "./pre_process/evaluation/test.csv"
-output_dir = "./evaluation_results"
+output_dir = "./tuned_evaluation_results_3B"
 os.makedirs(output_dir, exist_ok=True)
 
 # --- 2. Load test data ---
