@@ -16,10 +16,10 @@ $ wc test.csv train.csv validation.csv
 
 #### LLM selection and training details
 We choose three LLMs: bert-base-chinese, Qwen2.5-0.5B, and Qwen2.5-3B.
-And run qLoRA as a training method.
+The training method, we run qLoRA as a training method and it take around 15 hours to train based on our machine.
 
 #### Evaluation metric and experiments 
-For this specific job, our evaluation focuses on Accuracy. However, we notice in future work, we might also need to evaluate prediction accuracy rate. More details can be found in the Evaluations section below.
+For this specific job, our evaluation focuses on Accuracy. However, we notice in future work, we might also need to evaluate prediction validation rate (How many output been generated as structure required in prompt). More details can be found in the Evaluations section below.
 
 #### Your thoughts
 Reference to Observation and conclusions section
