@@ -1,25 +1,31 @@
-## Evaluations (Sort version)
+# Project Evaluations (Sort version)
+
 #### Dataset construction
 Though we choose to work on closed and not publicly available data, we also want to explain how this project works, thus sample data is provided to help readers better understand our approach.
 ./pre_process/labeled_v2.csv.txt and ./pre_process/unlabeled_v2.csv.txt are sample data from labeled_v2.csv and unlabeled_v2.csv where the full data is located.
 Based on the labeled data, we have 70% train + 20% test + 10% validation split for the setup.
 
-(base) dourlin@cappucino:~/Develop/LLM_finetune/pre_process/evaluation$ wc test.csv train.csv validation.csv 
+```
+$ wc test.csv train.csv validation.csv 
    14850    14915  4528171 test.csv
    51970    52120 15843275 train.csv
     7426     7439  2282993 validation.csv
    74246    74474 22654439 total
+```
+
 
 #### LLM selection and training details
 We choose three LLMs: bert-base-chinese, Qwen2.5-0.5B, and Qwen2.5-3B.
 And run qLoRA as a training method.
-#### Evaluation metric, and experiments 
+
+#### Evaluation metric and experiments 
 For this specific job, our evaluation focuses on Accuracy. However, we notice in future work, we might also need to evaluate prediction accuracy rate. More details can be found in the Evaluations section below.
 
 #### Your thoughts
 Reference to Observation and conclusions section
 
 
+# Project report (Full version)
 ## Research question
 Social equality discussion is an important topic for sociology; researchers often search the internet for collecting data, but most of the time the data from the internet are uncensored and unlabeled, which creates barriers for researchers to analyze and organize data. In this work, I collaborate with students in the sociology department and trained an LLM based on this. This work focuses on the technical part, including how to clean data, how to use data we already have to fine-tune the foundation model we have, and how to make the fine-tuning process more efficient with hardware awareness. What we do not include: Prompt engineering to let the model generate output, data analysis including justifying if every data we used for training/testing is accurate, since they require domain-specific work. Also, as requested by the data provider, we are not including original data or intermediate data since they are not public data. But if you want to replicate the work or collaborate on that, please contact me or request by github issue.
 
@@ -75,12 +81,14 @@ Since Bert has a different model family than Qwen2.5, we choose to use similar b
 {bert_eval.py, bert_tune.py, bert_tune_eval.py, bert_inference_compare.py}. We also include the evaluation.
 
 
+
+![Figure1 : Model performance compare](./plot_result.jpg) 
+
 ## Observation and conclusions:
 For this project, I tried different model combinations including bert-base-chinese(110M), Qwen2.5-3B, and Qwen2.5-0.5B. I started my approach from Qwen2.5 models since they're popular recently and more flexible for potential future jobs (like comment summarization and emotional analysis). But since the task right now is just classification, I also ran experiments on bert.
 Surprisingly, even though bert has a relatively much smaller parameter size, it outperforms Qwen2.5-0.5B and is even slightly better than Qwen2.5-3B.
 Also, another problem of decoder-only architecture is they have randomness when generating outputs. For example, even if I ask it to give me results like "output result as '[1]'", it might still generate like '(1)' though it has a correct prediction. And that brings in another problem that the result might be meaningful but not useful. It might generate results like 'It seems like this comment does not have gender bias', but we are expecting it to return results as one single number from 0-3 reflecting its class. As we can see from Qwen2.5-3B base model, that's a huge problem since valid predictions are only 42.33%, which makes the accuracy only around 16% (0.3753 * 42.33%) with that number even worse than random guessing. Though the validation becomes near 100% after fine-tuning, the accuracy is still not better than bert.
 
-![Alt text](./plot_result.jpg) 
 
 ### Evalucations
 ````
