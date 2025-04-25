@@ -21,10 +21,13 @@ import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
 
 # 1. Configuration
-MODEL_PATH = "./Qwen2.5-3B"
+
+model_name = "Qwen2.5-3B"
+MODEL_PATH = "./" + model_name   # You can change this to your preferred model
 TRAIN_FILE = "./pre_process/evaluation/train.csv"
 VALIDATION_FILE = "./pre_process/evaluation/validation.csv"
-OUTPUT_DIR = "./qlora_checkpoints"
+OUTPUT_DIR = "./qlora_checkpoints" + model_name
+prompt_location =  "./pre_process/datas/prompt_v2.txt"
 
 # Create output directory
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -62,7 +65,7 @@ lora_config = LoraConfig(
     target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
     lora_dropout=0.05,
     bias="none",
-    task_type="CAUSAL_LM"
+    task_type="SEQ_CLS" # Change that to text classification
 )
 
 # Prepare model for k-bit training
@@ -80,14 +83,10 @@ print(f"Loading validation data from {VALIDATION_FILE}...")
 val_df = pd.read_csv(VALIDATION_FILE)
 print(f"Loaded {len(val_df)} validation samples")
 
-# Create the system prompt for the classification task
-system_prompt = """You are an assistant that classifies comments into one of four categories:
-0: Positive - Comments that express gratitude, satisfaction, or positive sentiment
-1: Mild - Comments that are neutral or contain mild opinions
-2: Negative - Comments that express criticism, anger, or negative sentiment
-3: Irrelevant - Comments that are off-topic or not relevant to the context
-
-Return only the category number in square brackets like this: [0], [1], [2], or [3]."""
+#Read the prompt as system message here
+with open(prompt_location, "r", encoding="utf-8") as file:
+    system_message = file.read()
+#print("Example of the prompt: \n"+ system_message+"\n--------------------\n")
 
 # Function to format each example
 def format_prompt(row):
@@ -95,7 +94,7 @@ def format_prompt(row):
     true_label = row["class"]
     
     # Format the prompt with system message and the comment to classify
-    prompt = f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\nClassify this comment: \"{message}\"<|im_end|>\n<|im_start|>assistant\n[{true_label}]<|im_end|>"
+    prompt = f"<|im_start|>system\n{system_message}<|im_end|>\n<|im_start|>user\nClassify this comment: \"{message}\"<|im_end|>\n<|im_start|>assistant\n[{true_label}]<|im_end|>"
     
     return prompt
 

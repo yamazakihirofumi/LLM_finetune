@@ -16,3 +16,10 @@ pre_process/datas/*/
 pre_process/evaluation/*.csv
 qlora_checkpoints/
 posttune_evaluate/
+tuned_evaluation_results_3B/
+
+#Berts
+bert-base-chinese/
+
+bert_checkpoints_improved/
+bert_checkpoints/

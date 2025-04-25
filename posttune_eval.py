@@ -9,10 +9,17 @@ import numpy as np
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 # --- 1. Define paths and settings ---
-base_model_path = "./Qwen2.5-3B"
-adapter_path = "./qlora_checkpoints/final_model"  # Path to your fine-tuned LoRA adapter
+model_name = "Qwen2.5-3B"
+base_model_path = "./" + base_model_path
+adapter_path = "./qlora_checkpoints/final_model"  # Path the LoRA adapter
 test_data_path = "./pre_process/evaluation/test.csv"
-output_dir = "./tuned_evaluation_results_3B"
+output_dir = "./tuned_evaluation_results_3B_final"
+#output_dir = "./tuned_evaluation_results_" + model_name
+prompt_location =  "./pre_process/datas/prompt_v2.txt"
+
+inference_batch_size = 4  # Adjust based on your GPU memory
+
+
 os.makedirs(output_dir, exist_ok=True)
 
 # --- 2. Load test data ---
@@ -48,14 +55,10 @@ prompts_for_batch = []
 true_labels = []
 custom_ids = []
 
-# System message
-system_message = """You are an assistant that classifies comments into one of four categories:
-0: Positive - Comments that express gratitude, satisfaction, or positive sentiment
-1: Mild - Comments that are neutral or contain mild opinions
-2: Negative - Comments that express criticism, anger, or negative sentiment
-3: Irrelevant - Comments that are off-topic or not relevant to the context
-
-Return only the category number in square brackets like this: [0], [1], [2], or [3]."""
+#Read the prompt to the system message
+with open(prompt_location, "r", encoding="utf-8") as file:
+    system_message = file.read()
+#print("Example of the prompt: \n"+ system_message+"\n--------------------\n")
 
 # Create prompts
 for idx, row in test_df.iterrows():
@@ -80,7 +83,7 @@ print(f"Prepared {len(prompts_for_batch)} prompts for inference")
 # --- 5. Run inference in batches ---
 print("Starting inference...")
 outputs_list = []
-inference_batch_size = 4  # Adjust based on your GPU memory
+
 
 for i in tqdm(range(0, len(prompts_for_batch), inference_batch_size), desc="Inference Progress"):
     batch_end = min(i + inference_batch_size, len(prompts_for_batch))

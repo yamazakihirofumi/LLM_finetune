@@ -9,9 +9,18 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import numpy as np
 
 # --- 1. Define paths and settings ---
-local_model_path = "./Qwen2.5-0.5B"  # You can change this to your preferred model
+model_name = "Qwen2.5-3B"
+local_model_path = "./" + model_name   # You can change this to your preferred model
 test_data_path = "./pre_process/evaluation/test.csv"
-output_dir = "./evaluation_results_0.5B"
+output_dir = "./evaluation_results_" + model_name # This is is concatinate the string for evaluation,
+print("The output dir will be save to "+output_dir)
+
+#Adjust batch size and prompt location
+inference_batch_size = 4
+prompt_location =  "./pre_process/datas/prompt_v2.txt"
+
+
+
 os.makedirs(output_dir, exist_ok=True)
 
 # --- 2. Load the test dataset ---
@@ -56,13 +65,10 @@ true_labels = []
 custom_ids = []
 
 # System message defining the classification task
-system_message = """You are an assistant that classifies comments into one of four categories:
-0: Positive - Comments that express gratitude, satisfaction, or positive sentiment
-1: Mild - Comments that are neutral or contain mild opinions
-2: Negative - Comments that express criticism, anger, or negative sentiment
-3: Irrelevant - Comments that are off-topic or not relevant to the context
 
-Return only the category number in square brackets like this: [0], [1], [2], or [3]."""
+with open(prompt_location, "r", encoding="utf-8") as file:
+    system_message = file.read()
+print("\n--------------------\n")
 
 # Process each test sample
 for idx, row in test_df.iterrows():
@@ -88,8 +94,7 @@ print(f"Prepared {len(prompts_for_batch)} prompts for inference")
 # --- 5. Run inference in batches ---
 print("Starting inference...")
 outputs_list = []
-inference_batch_size = 4  # Adjust based on your GPU's VRAM capacity
-# Normally is 4 but 400 work for 0.5B model
+
 
 for i in tqdm(range(0, len(prompts_for_batch), inference_batch_size), desc="Inference Progress"):
     batch_end = min(i + inference_batch_size, len(prompts_for_batch))
