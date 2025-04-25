@@ -12,12 +12,12 @@ Qwen*/
 # Specific directories
 pre_process/*.jsonl
 pre_process/*.csv
-pre_process/datas/*/
+pre_process/datas/
 pre_process/evaluation/*.csv
 qlora_checkpoints/
 posttune_evaluate/
 tuned_evaluation_results_3B/
-
+tuned_evaluation_results_3B_final/
 #Berts
 bert-base-chinese/
 
