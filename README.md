@@ -36,6 +36,30 @@ git clone https://huggingface.co/Qwen/Qwen2.5-0.5B
 7. local_inference.py: Run the inference again to check the performance diff compare to last run
 
 
-    
+###8. Resutls compare
+Base Model: ./Qwen2.5-3B
+LoRA Adapter: ./qlora_checkpoints/final_model
+Test set: ./pre_process/evaluation/test.csv
+Total samples: 14849
+Valid predictions: 14849 (100.00%)
+Accuracy: 0.7210
+
+Classification Report:
+              precision    recall  f1-score   support
+
+    Positive       0.44      0.82      0.58      1944
+        Mild       0.84      0.76      0.80      6377
+    Negative       0.53      0.47      0.50      1313
+  Irrelevant       0.85      0.70      0.77      5215
+
+    accuracy                           0.72     14849
+   macro avg       0.67      0.69      0.66     14849
+weighted avg       0.76      0.72      0.73     14849
+
+Confusion Matrix:
+[[1600  102   89  153]
+ [1051 4845  191  290]
+ [ 225  273  618  197]
+ [ 742  562  268 3643]]
     
     
