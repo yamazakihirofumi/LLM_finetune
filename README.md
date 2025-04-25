@@ -1,4 +1,26 @@
 
+## Evaluations (Sort version)
+#### Dataset construction
+Though we choose work on close and not public available data, but we also want to explain how this project work, thus sample datas are provided for help reader better understanding our approach 
+./pre_process/labeled_v2.csv.txt and ./pre_process/unlabeled_v2.csv.txt are sample datas from labeled_v2.csv and unlabeled_v2.csv where the full data located. 
+Based on the labeled data we have 70% train + 20% test + 10% validation split for the set up. 
+
+(base) dourlin@cappucino:~/Develop/LLM_finetune/pre_process/evaluation$ wc test.csv train.csv validation.csv 
+   14850    14915  4528171 test.csv
+   51970    52120 15843275 train.csv
+    7426     7439  2282993 validation.csv
+   74246    74474 22654439 total
+
+#### LLM selection and training details
+We choose three LLM, bert-base-chinese , Qwen2.5-0.5B and Qwen2.5-3B. 
+And run qLoRA as a training method.
+#### Evaluation metric, and experiments 
+For this specific job , our evaluation focus on Accuracy. However we notice in the future work. We might also need to evaluate prediction accuracy rate. More details can find in Evalucations section below. 
+
+#### Your thoughts
+Reference to Observation and conclusions section
+
+
 ## Research question
 Social equility discussion is a important topic for sociology, researchers often search internet for collecting data, but most of time the data from internet are un-censored and un-labeled. Which creat barrier for researchers to analyze and organize datas. In this work I collaborate with student in sociology department and trained a LLM based on the thing. This work is focus on technical part, include how to how to cleaning data, how to use data we already have to fine-tune the fundation model we have, how to make fine tune process more efficient with hardware - awareness. What we not do include: Prompt engineering to let model generate output, data analysis include justify if every data we used for training/testing are accurate. Since they require domain specific work. Also as requested by data provider,we are not including original data or internediate data since they are not public data. But if you want to replicate the work or collaborate on that. Please contact me or request by github issue. 
 
@@ -60,11 +82,7 @@ Surpringly, even bert have relative way much smaller parameter size. It's outper
 Also, another problem of decoder only architecture is they have randonness when generating outputs. for example even I ask it give me result like "output result as '[1]' " It might still generate like '(1)' thought it have a correct preduction. And that brings in another problem that the result might meaningful but not useful. it might generate result like 'It seems like this comment do not have gender bias' but we are expecting it return result as one single number from 0-3 reflecting it's class. As we can see from Qwen2.5-3B base model that's a huge problem since valid predictions are only 42.33% which makes the accuracy only around 16% (0.3753 * 42.33%) with that number is even worse than random-guessing. Though the validation become near 100% after fine tune, but accuract is still not better than bert. 
 
 
-
-
-
-
-## Evaluations
+### Evalucations
 
 #### result for Qwen2.5-3B
 --------------------------------------------------------------------------------
